@@ -6,25 +6,36 @@ const net = require('net');
 const { Buffer } = require('buffer');
 const { exec, execSync } = require('child_process');
 const { WebSocket, createWebSocketStream } = require('ws');
-const UUID = process.env.UUID || 'd2a481b7-11be-44b5-84e5-755665945957'; 
+const path = require('path');
+
+const UUID = process.env.UUID || '1df85032-66e9-45c6-9937-0546415dc18b'; 
 const NEZHA_SERVER = process.env.NEZHA_SERVER || ''; 
 const NEZHA_PORT = process.env.NEZHA_PORT || '';   
 const NEZHA_KEY = process.env.NEZHA_KEY || '';              
-const DOMAIN = process.env.DOMAIN || ''; 
+const DOMAIN = process.env.DOMAIN || 'luna.pylex.software'; 
 const AUTO_ACCESS = process.env.AUTO_ACCESS || false;
 const SUB_PATH = process.env.SUB_PATH || 'websub';  
-const NAME = process.env.NAME || 'serverstorm-nodews-Vls'; 
-const PORT = process.env.PORT || 1062;  
+const NAME = process.env.NAME || 'swispbyte-nodews-Vls'; 
+const PORT = process.env.PORT || 11600;  
 
 const metaInfo = execSync(
   'curl -s https://speed.cloudflare.com/meta | awk -F\\" \'{print $26"-"$18}\' | sed -e \'s/ /_/g\'',
   { encoding: 'utf-8' }
 );
 const ISP = metaInfo.trim();
+
 const httpServer = http.createServer((req, res) => {
   if (req.url === '/') {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Hello, World, web is serverstorm hosting\n');
+    const filePath = path.join(__dirname, 'public', 'index.html');
+    fs.readFile(filePath, (err, data) => {
+      if (err) {
+        res.writeHead(500, { 'Content-Type': 'text/plain' });
+        res.end('Internal Server Error\n');
+      } else {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(data);
+      }
+    });
   } else if (req.url === `/${SUB_PATH}`) {
     const vlessURL = `vless://${UUID}@www.wto.org:443?encryption=none&security=tls&sni=${DOMAIN}&type=ws&host=${DOMAIN}&path=%2F#${NAME}-${ISP}`;
     
@@ -186,12 +197,22 @@ const delFiles = () => {
   fs.unlink('config.yaml', () => {}); 
 };
 
-httpServer.listen(PORT, () => {
+const getPublicIp = async () => {
+  try {
+    const response = await axios.get('https://api.ipify.org?format=json');
+    return response.data.ip;
+  } catch (error) {
+    console.error('Error fetching public IP:', error);
+    return 'localhost';
+  }
+};
+
+httpServer.listen(PORT, async () => {
+  const publicIp = await getPublicIp();
   runnz();
   setTimeout(() => {
     delFiles();
   }, 30000);
   addAccessTask();
-  const host = httpServer.address().address;
-  console.log(`Server is running on http://${host}:${PORT}`);
+  console.log(`Server is running on http://${publicIp}:${PORT}`);
 });

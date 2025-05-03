@@ -1,7 +1,7 @@
 {
-  "name": "node-ws",
+  "name": "node-webapp",
   "version": "1.0.0",
-  "description": "Node.js Server",
+  "description": "Node.js Web Server",
   "main": "index.js",
   "author": "lslove10010",
   "license": "MIT",

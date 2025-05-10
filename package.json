@@ -10,8 +10,10 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "express": "^4.17.1",
+    "pm2": "^5.4.3",
     "ws": "^8.14.2",
-    "axios": "^1.6.2"
+    "axios": "^1.6.2" 
   },
   "engines": {
     "node": ">=16.0.0",

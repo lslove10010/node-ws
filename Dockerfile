@@ -26,7 +26,7 @@ ENV UUID=28732a5f-8e04-4dd4-b97c-ddde74ee1f02 \
 USER 10014
 
 # 6) 端口声明
-EXPOSE 8080
+EXPOSE 3000
 
 # 7) 启动命令
 CMD ["node", "index.js"]

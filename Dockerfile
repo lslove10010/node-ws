@@ -1,14 +1,13 @@
 
 FROM node:20-alpine3.20
 
-WORKDIR /tmp
+WORKDIR /app
 
-COPY index.js index.html package.json ./
+COPY index.js index.html ./
 
 
 RUN apk update && apk add --no-cache bash openssl curl &&\
-    chmod +x index.js &&\
-    npm install
+    chmod +x index.js
 
 # CMD ["node", "index.js"]
 
@@ -16,12 +15,12 @@ RUN apk update && apk add --no-cache bash openssl curl &&\
 # WORKDIR /app
 
 # 2) 先复制包清单并安装依赖（优先锁文件）
-#COPY package.json package-lock.json* ./
-#RUN if [ -f package-lock.json ]; then \
-#      npm ci --omit=dev; \
-#    else \
-#      npm install --only=production; \
-#    fi
+COPY package.json package-lock.json* ./
+RUN if [ -f package-lock.json ]; then \
+      npm ci --omit=dev; \
+    else \
+      npm install --only=production; \
+    fi
 
 # 3) 复制应用源码（不要在同一行尾部加注释）
 #COPY index.js ./

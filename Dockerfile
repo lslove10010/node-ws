@@ -4,3 +4,4 @@ ENV PORT=8080
 ENV NAME=choreo
 ENV SUB_PATH=websub
 ENV DOMAIN=choreo.cnav.cn.eu.org
+USER 1014

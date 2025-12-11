@@ -5,7 +5,6 @@ WORKDIR /tmp
 
 COPY index.js index.html package.json ./
 
-EXPOSE 8080
 
 RUN apk update && apk add --no-cache bash openssl curl &&\
     chmod +x index.js &&\
@@ -38,7 +37,7 @@ RUN apk update && apk add --no-cache bash openssl curl &&\
 USER 10014
 
 # 6) 端口声明
-EXPOSE 3000
+EXPOSE 8080
 
 # 7) 启动命令
 CMD ["node", "index.js"]

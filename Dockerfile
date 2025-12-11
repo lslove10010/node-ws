@@ -28,6 +28,7 @@ RUN if [ -f package-lock.json ]; then \
 # 4) 环境变量
 ENV UUID=28732a5f-8e04-4dd4-b97c-ddde74ee1f02 \
     NAME=choreo \
+    PORT=8080 \
     SUB_PATH=websub \
     DOMAIN=choreo.cnav.cn.eu.org
 
